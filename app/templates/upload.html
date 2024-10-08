@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .upload-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .upload-btn:hover {
+            background-color: #218838;
+        }
+        #url {
+            margin-top: 20px;
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Upload Image</h2>
+        <input type="file" id="image-input" accept="image/*">
+        <button class="upload-btn" onclick="uploadImage()">Upload</button>
+
+        <p id="url" class="hidden"></p>
+    </div>
+
+    <script>
+        function uploadImage() {
+            const imageInput = document.getElementById('image-input');
+            const file = imageInput.files[0];
+
+            if (!file) {
+                alert("Please select an image.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.url) {
+                    const urlElement = document.getElementById('url');
+                    urlElement.textContent = `Download resized image: ${data.url}`;
+                    urlElement.classList.remove('hidden');
+
+                    // Automatically download the image
+                    const link = document.createElement('a');
+                    link.href = data.url;
+                    link.download = data.filename;
+                    link.click();
+                } else {
+                    alert('Failed to upload image');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+
+</body>
+</html>
