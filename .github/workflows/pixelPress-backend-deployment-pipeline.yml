@@ -16,7 +16,7 @@ jobs:
     - name: Login to Azure Container Registry
       uses: azure/docker-login@v1
       with:
-        login-server: levelupportal.azurecr.io
+        login-server: levelupcrtest.azurecr.io
         username: ${{ secrets.ACRUSERNAME }}
         password: ${{ secrets.ACRPASSWORD }}
 
