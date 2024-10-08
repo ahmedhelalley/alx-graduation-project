@@ -1,0 +1,16 @@
+.venv/
+venv/
+.env
+*.pyc
+
+__pycache__/
+.idea
+.vscode
+
+# database migrations
+migrations/
+
+*.pdf
+output.html
+test.py
+output_chart.png
