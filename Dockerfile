@@ -1,0 +1,18 @@
+FROM python:alpine
+
+ARG AZURE_STORAGE_CONNECTION_STRING
+ARG AZURE_CONTAINER_NAME
+
+ENV AZURE_STORAGE_CONNECTION_STRING=$AZURE_STORAGE_CONNECTION_STRING
+ENV AZURE_CONTAINER_NAME=$AZURE_CONTAINER_NAME
+
+WORKDIR /app
+
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . /app/
+
+EXPOSE 5000
+
+CMD ["flask", "run", "--host", "0.0.0.0", "--port=5000"]
