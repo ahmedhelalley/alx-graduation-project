@@ -22,7 +22,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t pixelpress --build-arg AZURE_STORAGE_CONNECTION_STRING="${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" --build-arg AZURE_CONTAINER_NAME="${{ secrets.AZURE_CONTAINER_NAME }}" ."
+        docker build -t pixelpress --build-arg AZURE_STORAGE_CONNECTION_STRING="${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" --build-arg AZURE_CONTAINER_NAME="${{ secrets.AZURE_CONTAINER_NAME }}" .
 
     - name: Tag Docker image
       run: |
