@@ -1,0 +1,33 @@
+name: Build and Push Docker Image of PixelPress Backend to Azure Container Registry (ALX Graduation Project)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Login to Azure Container Registry
+      uses: azure/docker-login@v1
+      with:
+        login-server: levelupportal.azurecr.io
+        username: ${{ secrets.ACRUSERNAME }}
+        password: ${{ secrets.ACRPASSWORD }}
+
+    - name: Build Docker image
+      run: |
+        docker build -t pixelpress --build-arg AZURE_STORAGE_CONNECTION_STRING="${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" --build-arg AZURE_CONTAINER_NAME="${{ secrets.AZURE_CONTAINER_NAME }}" ."
+
+    - name: Tag Docker image
+      run: |
+        docker tag pixelpress levelupcrtest.azurecr.io/pixelpress:latest
+
+    - name: Push Docker image to Azure Container Registry
+      run: |
+        docker push levelupcrtest.azurecr.io/pixelpress:latest
