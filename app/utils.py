@@ -6,6 +6,11 @@ import os
 def resize_image(image_stream, max_size):
     img = Image.open(image_stream)
 
+    # Resize dimensions if the image is too large
+    max_dimension = 1024  # Example max dimension, adjust as needed
+    if max(img.size) > max_dimension:
+        img.thumbnail((max_dimension, max_dimension), Image.LANCZOS)
+
     # Resize logic to ensure image is within 1MB
     output_stream = BytesIO()
     quality = 85  # Start with 85% quality for JPG

@@ -49,7 +49,8 @@
         <h2>Upload Image</h2>
         <input type="file" id="image-input" accept="image/*">
         <button class="upload-btn" onclick="uploadImage()">Upload</button>
-
+        
+        <p id="processing-message" class="hidden">Processing...</p>
         <p id="url" class="hidden"></p>
     </div>
 
@@ -57,37 +58,46 @@
         function uploadImage() {
             const imageInput = document.getElementById('image-input');
             const file = imageInput.files[0];
-
+            const processingMessage = document.getElementById('processing-message');
+    
             if (!file) {
                 alert("Please select an image.");
                 return;
             }
-
+    
+            // Show the processing message
+            processingMessage.classList.remove('hidden');
+    
             const formData = new FormData();
             formData.append('image', file);
-
+    
             fetch('/upload', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
+                // Hide the processing message
+                processingMessage.classList.add('hidden');
+    
                 if (data.url) {
                     const urlElement = document.getElementById('url');
-                    urlElement.textContent = `Download resized image: ${data.url}`;
+                    urlElement.textContent = data.url;
                     urlElement.classList.remove('hidden');
-
+    
                     // Automatically download the image
-                    const link = document.createElement('a');
-                    link.href = data.url;
-                    link.download = data.filename;
-                    link.click();
-                } else {
-                    alert('Failed to upload image');
+                    const a = document.createElement('a');
+                    a.href = data.url;
+                    a.download = '';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                // Hide the processing message in case of error
+                processingMessage.classList.add('hidden');
+                alert("An error occurred while uploading the image.");
             });
         }
     </script>
