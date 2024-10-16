@@ -7,7 +7,7 @@ def resize_image(image_stream, max_size):
     img = Image.open(image_stream)
 
     # Resize dimensions if the image is too large
-    max_dimension = 1024  # Example max dimension, adjust as needed
+    max_dimension = 1024
     if max(img.size) > max_dimension:
         img.thumbnail((max_dimension, max_dimension), Image.LANCZOS)
 
@@ -22,7 +22,7 @@ def resize_image(image_stream, max_size):
         if size <= max_size or quality <= 10:
             break
 
-        quality -= 5  # Reduce quality if still too large
+        quality -= 5
 
     output_stream.seek(0)
     return output_stream
